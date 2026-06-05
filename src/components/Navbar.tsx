@@ -42,11 +42,11 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
         transition={{ duration: 0.6, ease: "easeOut" }}
         className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
           isScrolled || isOpen
-            ? "bg-[rgba(22,163,74,0.97)] md:bg-[rgba(22,163,74,0.97)] md:backdrop-blur-md border-b border-[#32e875]/40 py-3 sm:py-3.5 shadow-lg"
-            : "bg-gradient-to-b from-[#32e875]/95 via-[#10b981]/70 to-transparent py-4 sm:py-5"
+            ? "bg-gradient-to-r from-[#2ee59d]/95 via-[#38B000]/95 to-[#006400]/95 backdrop-blur-md border-b border-[#32e875]/40 py-1.5 sm:py-2 shadow-lg"
+            : "bg-gradient-to-r from-[#2ee59d]/85 via-[#38B000]/80 to-[#006400]/85 backdrop-blur-sm border-b border-[#32e875]/25 py-2 sm:py-2.5"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-12 flex items-center justify-between relative w-full h-10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-12 flex items-center justify-between relative w-full h-8 sm:h-9">
           
           {/* Desktop Symmetrical Navigation and Logo */}
           <div className="hidden xl:flex items-center justify-between w-full font-jakarta tracking-wide font-extrabold text-[12px] xl:text-[13px]">
@@ -100,12 +100,12 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
                   src={logoUrl} 
                   alt="Tagbilaran Official Seal" 
                   onError={() => setLogoFailed(true)}
-                  className="w-10 h-10 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110" 
+                  className="w-8 h-8 sm:w-8.5 sm:h-8.5 object-contain drop-shadow-md transition-transform duration-300 group-hover:scale-110" 
                   referrerPolicy="no-referrer"
                 />
               ) : (
-                <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center border border-white/25 text-[#FFD54F] group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                  <Compass className="w-5 h-5 animate-[spin_10s_linear_infinite]" />
+                <div className="w-8 h-8 sm:w-8.5 sm:h-8.5 rounded-lg bg-white/10 flex items-center justify-center border border-white/25 text-[#FFD54F] group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                  <Compass className="w-4 h-4 sm:w-4.5 sm:h-4.5 animate-[spin_10s_linear_infinite]" />
                 </div>
               )}
             </div>
@@ -153,7 +153,7 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
           {/* Mobile Layout (centered logo with burger on the right) */}
           <div className="flex xl:hidden items-center justify-between w-full h-full relative z-50">
             {/* Left spacing placeholder to visually balance the menu button on the right */}
-            <div className="w-10" />
+            <div className="w-8" />
 
             {/* Centered Logo for Mobile */}
             <div 
@@ -166,12 +166,12 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
                   src={logoUrl} 
                   alt="Tagbilaran Official Seal" 
                   onError={() => setLogoFailed(true)}
-                  className="w-9 h-9 object-contain drop-shadow-md" 
+                  className="w-7 sm:w-7.5 h-7 sm:h-7.5 object-contain drop-shadow-md" 
                   referrerPolicy="no-referrer"
                 />
               ) : (
-                <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center border border-white/25 text-[#FFD54F]">
-                  <Compass className="w-4 h-4 animate-[spin_10s_linear_infinite]" />
+                <div className="w-7 sm:w-7.5 h-7 sm:h-7.5 rounded-lg bg-white/10 flex items-center justify-center border border-white/25 text-[#FFD54F]">
+                  <Compass className="w-3.5 h-3.5 animate-[spin_10s_linear_infinite]" />
                 </div>
               )}
             </div>
@@ -179,11 +179,11 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
             {/* Mobile Burger Toggle UI */}
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="flex items-center justify-center p-2 rounded-xl text-white hover:text-[#FFD54F] hover:bg-white/10 active:scale-95 transition-all cursor-pointer h-10 w-10 border border-white/10"
+              className="flex items-center justify-center p-1 sm:p-1.5 rounded-lg text-white hover:text-[#FFD54F] hover:bg-white/10 active:scale-95 transition-all cursor-pointer h-7.5 w-7.5 sm:h-8 sm:w-8 border border-white/10"
               aria-label="Toggle Navigation Menu"
               id="nav-mobile-toggle"
             >
-              {isOpen ? <X className="w-6 h-6 animate-pulse" /> : <Menu className="w-6 h-6" />}
+              {isOpen ? <X className="w-4.5 h-4.5 sm:w-5 sm:h-5 animate-pulse" /> : <Menu className="w-4.5 h-4.5 sm:w-5 sm:h-5" />}
             </button>
           </div>
 
@@ -209,7 +209,7 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 180 }}
-              className="fixed inset-y-0 right-0 z-[45] w-[240px] sm:w-[280px] h-full bg-[rgba(22,163,74,0.99)] backdrop-blur-2xl flex flex-col justify-start overflow-y-auto px-6 sm:px-8 pt-28 pb-12 xl:hidden border-l border-white/10 shadow-2xl"
+              className="fixed inset-y-0 right-0 z-[45] w-[240px] sm:w-[280px] h-full bg-gradient-to-b from-[#2ee59d]/98 via-[#38B000]/98 to-[#006400]/98 backdrop-blur-2xl flex flex-col justify-start overflow-y-auto px-6 sm:px-8 pt-28 pb-12 xl:hidden border-l border-white/10 shadow-2xl"
               id="mobile-drawer-overlay"
             >
               {/* Soft decorative background circles matching brand layout */}

@@ -155,11 +155,11 @@ export default function App() {
       case "heritage":
         return "#ffffff";
       case "tagbeats":
-        return "linear-gradient(to bottom, #32e875 0%, #32e875 76px, #ffffff 77px, #ffffff 100%)";
+        return "#ffffff";
       case "downloadables":
         return "radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.22) 0%, transparent 55%), radial-gradient(circle at 75% 30%, rgba(50, 232, 117, 0.38) 0%, transparent 65%), radial-gradient(circle at 30% 70%, rgba(5, 70, 26, 0.35) 0%, transparent 60%), radial-gradient(circle at 85% 85%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), linear-gradient(to bottom, #32e875 0%, #05461a 95vh, #02200a 100%)";
       case "barangay":
-        return "linear-gradient(to bottom, #32e875 0%, #32e875 76px, #ffffff 77px, #ffffff 100%)";
+        return "#ffffff";
       case "about":
         return "radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.22) 0%, transparent 50%), radial-gradient(circle at 85% 35%, rgba(50, 232, 117, 0.42) 0%, transparent 60%), radial-gradient(circle at 20% 70%, rgba(5, 70, 26, 0.38) 0%, transparent 60%), radial-gradient(circle at 75% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), linear-gradient(to bottom, #32e875 0%, #05461a 95vh, #02200a 100%)";
       default:
@@ -269,21 +269,21 @@ export default function App() {
             />
 
             {/* High-end main catalog details - White Background & Premium Green Text */}
-            <div className="bg-white text-[#70E000] w-full relative z-10 pb-24 pt-16 border-t border-[#32e875]/20" id="home-view-main-container">
+            <div className="bg-white text-[#006400] w-full relative z-10 pb-24 pt-16 border-t border-[#32e875]/20" id="home-view-main-container">
               <main className="max-w-7xl mx-auto px-6 sm:px-12 flex flex-col gap-12" id="home-view-main">
                 
                 {/* PART 0: HISTORY OF TAGBILARAN */}
                 <section id="tagbilaran-history" className="text-center max-w-4xl mx-auto pt-4">
                   <div className="flex flex-col items-center">
                     {/* Beautiful History Capitalized Title */}
-                    <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black tracking-widest text-[#70E000] uppercase">
+                    <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black tracking-widest text-[#006400] uppercase">
                        History
                     </h2>
                     
                     {/* Paragraphs with customized high-end editorial styling */}
-                    <div className="mt-6 space-y-6 text-[#70E000] text-sm sm:text-base md:text-lg leading-relaxed font-serif text-justify sm:text-center font-bold max-w-3xl px-4">
+                    <div className="mt-6 space-y-6 text-[#006400] text-sm sm:text-base md:text-lg leading-relaxed font-serif text-justify sm:text-center font-bold max-w-3xl px-4">
                       <p>
-                        Shielded from the southwest monsoons by Panglao Island and the north winds by the Maribojoc mountain range, Tagbilaran was formerly called <span className="font-serif italic font-extrabold text-[#CCFF33]">Tinabilan</span> , meaning "screened" or "shielded". Another account says it is derived from <span className="font-serif italic font-extrabold text-[#CCFF33]">Tagubilaan</span> , a contraction from the words <span className="font-serif italic font-bold text-[#9EF01A]">tagu</span> that means "to hide" and <span className="font-serif italic font-bold text-[#9EF01A]">Bilaan</span>, a tribe of marauders.
+                        Shielded from the southwest monsoons by Panglao Island and the north winds by the Maribojoc mountain range, Tagbilaran was formerly called <span className="font-serif italic font-extrabold text-[#38B000]">Tinabilan</span> , meaning "screened" or "shadowed". Another account says it is derived from <span className="font-serif italic font-extrabold text-[#38B000]">Tagubilaan</span> , a contraction from the words <span className="font-serif italic font-bold text-[#38B000]">tagu</span> that means "to hide" and <span className="font-serif italic font-bold text-[#38B000]">Bilaan</span>, a tribe of marauders.
                       </p>
                       <p>
                         For 112 years, Tagbilaran was already an independent town before Bohol became a separate politico-military province from Cebu in 1854. Tagbilaran was made the capital town for the reason that it has a promising harbor. It became a chartered city on July 1, 1966.
@@ -305,10 +305,10 @@ export default function App() {
                 <section id="heritage-bento" className="scroll-mt-24 text-center">
                   <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto mb-12 gap-8" id="bento-header-wrapper">
                     <div className="w-full text-center">
-                      <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#70E000] animate-fade-in text-center">
+                      <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#006400] animate-fade-in text-center">
                         The Heritage and Tourism Ecosystem
                       </h2>
-                      <p className="text-[#9EF01A] text-sm sm:text-base leading-relaxed mt-4 font-sans font-bold text-center">
+                      <p className="text-[#006400] text-sm sm:text-base leading-relaxed mt-4 font-sans font-bold text-center">
                         Explore the historic legacy of Tagbilaran's most celebrated sacred spaces, ancestral landmarks, and immersive cultural archives below.
                       </p>
                     </div>
@@ -322,14 +322,14 @@ export default function App() {
                     <div className="hidden md:block">
                       <button
                         onClick={handlePrevLandmark}
-                        className="absolute left-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-[#70E000]/30 bg-white hover:bg-emerald-50 text-[#70E000] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer shadow-lg backdrop-blur-md z-20"
+                        className="absolute left-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-[#006400]/30 bg-white hover:bg-emerald-50 text-[#006400] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer shadow-lg backdrop-blur-md z-20"
                         aria-label="Previous Landmark"
                       >
                         <ChevronLeft className="w-6 h-6" />
                       </button>
                       <button
                         onClick={handleNextLandmark}
-                        className="absolute right-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-[#70E000]/30 bg-white hover:bg-emerald-50 text-[#70E000] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer shadow-lg backdrop-blur-md z-20"
+                        className="absolute right-[-60px] top-1/2 -translate-y-1/2 w-12 h-12 rounded-full border border-[#006400]/30 bg-white hover:bg-emerald-50 text-[#006400] flex items-center justify-center hover:scale-110 active:scale-95 transition-all cursor-pointer shadow-lg backdrop-blur-md z-20"
                         aria-label="Next Landmark"
                       >
                         <ChevronRight className="w-6 h-6" />
@@ -370,7 +370,7 @@ export default function App() {
                       {/* Previous Mobile Arrow */}
                       <button
                         onClick={handlePrevLandmark}
-                        className="md:hidden w-10 h-10 rounded-full border border-[#70E000]/25 bg-white text-[#70E000] flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+                        className="md:hidden w-10 h-10 rounded-full border border-[#006400]/25 bg-white text-[#006400] flex items-center justify-center cursor-pointer active:scale-95 transition-all"
                         aria-label="Previous Landmark"
                       >
                         <ChevronLeft className="w-5 h-5" />
@@ -384,8 +384,8 @@ export default function App() {
                             onClick={() => setActiveLandmark(landmark)}
                             className={`h-2.5 rounded-full transition-all duration-300 ${
                               activeLandmark?.id === landmark.id 
-                                ? "w-8 bg-[#70E000]" 
-                                : "w-2.5 bg-[#9EF01A]/30 hover:bg-[#9EF01A]/60"
+                                ? "w-8 bg-[#006400]" 
+                                : "w-2.5 bg-[#006400]/30 hover:bg-[#006400]/60"
                             }`}
                             title={landmark.title}
                           />
@@ -395,7 +395,7 @@ export default function App() {
                       {/* Next Mobile Arrow */}
                       <button
                         onClick={handleNextLandmark}
-                        className="md:hidden w-10 h-10 rounded-full border border-[#70E000]/25 bg-white text-[#70E000] flex items-center justify-center cursor-pointer active:scale-95 transition-all"
+                        className="md:hidden w-10 h-10 rounded-full border border-[#006400]/25 bg-white text-[#006400] flex items-center justify-center cursor-pointer active:scale-95 transition-all"
                         aria-label="Next Landmark"
                       >
                         <ChevronRight className="w-5 h-5" />

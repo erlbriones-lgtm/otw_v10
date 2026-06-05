@@ -311,12 +311,12 @@ export default function TagBeats() {
         MAIN CONTENT BODY
         Applies white background and high-contrast green branding below the curve
       */}
-      <div className="bg-white text-[#70E000] w-full relative z-10 pb-24 pt-0" id="tagbeats-main-body-container">
+      <div className="bg-white text-[#006400] w-full relative z-10 pb-24 pt-0" id="tagbeats-main-body-container">
         <main className="max-w-7xl mx-auto px-6 sm:px-12 flex flex-col gap-6" id="tagbeats-portal-main">
           
           {/* Explanatory introduction text in standard content view */}
           <div className="max-w-3xl mx-auto text-center mb-2 flex flex-col items-center justify-center" id="tagbeats-body-intro">
-            <p className="text-[#9EF01A] text-sm sm:text-base leading-relaxed font-sans font-bold text-center">
+            <p className="text-[#006400] text-sm sm:text-base leading-relaxed font-sans font-bold text-center">
               Drown in the rich acoustic soul of the City of Peace and Friendship. Experience original local hymns, Saulog festivity anthems, and neoclassical suites composed by Tagbilaran's creative ensembles.
             </p>
           </div>
@@ -324,15 +324,15 @@ export default function TagBeats() {
           {/* Directory Status Check with emerald styling */}
           {tracks.length === 0 && !loading && (
             <div className="bg-emerald-50 border border-emerald-100/70 p-8 rounded-3xl text-center mb-10 max-w-2xl mx-auto text-left font-medium" id="empty-folder-hint">
-              <Music className="w-10 h-10 text-[#70E000]/70 mx-auto mb-4 animate-bounce" />
-              <h3 className="text-[#70E000] font-sans font-extrabold text-base mb-2">No audio tracks detected in audio</h3>
-              <p className="text-[#70E000]/80 text-xs leading-relaxed font-sans font-medium mb-4">
-                The scanner checked the directory <code className="bg-emerald-100/50 px-2 py-1 rounded text-[#70E000] text-[11px] font-mono">/audio</code>, but it seems to be empty.
+              <Music className="w-10 h-10 text-[#006400]/70 mx-auto mb-4 animate-bounce" />
+              <h3 className="text-[#006400] font-sans font-extrabold text-base mb-2">No audio tracks detected in audio</h3>
+              <p className="text-[#006400]/80 text-xs leading-relaxed font-sans font-medium mb-4">
+                The scanner checked the directory <code className="bg-emerald-100/50 px-2 py-1 rounded text-[#006400] text-[11px] font-mono">/audio</code>, but it seems to be empty.
               </p>
-              <div className="text-xs bg-white p-4 rounded-xl border border-emerald-100 text-[#70E000]/70 mb-4 font-mono">
+              <div className="text-xs bg-white p-4 rounded-xl border border-emerald-100 text-[#006400]/70 mb-4 font-mono">
                 <strong>How to add your songs:</strong>
                 <ul className="list-disc pl-5 mt-2 space-y-1 text-stone-600">
-                  <li>Place your <code className="text-[#70E000] font-bold">.mp3</code> files directly into the <code className="text-[#70E000] font-bold">/audio</code> folder in the project folder root.</li>
+                  <li>Place your <code className="text-[#006400] font-bold">.mp3</code> files directly into the <code className="text-[#006400] font-bold">/audio</code> folder in the project folder root.</li>
                   <li>Refresh this page, and the application will dynamically load, play, and make them available for download automatically!</li>
                 </ul>
               </div>
@@ -363,7 +363,7 @@ export default function TagBeats() {
                       <motion.div 
                         animate={isPlaying ? { rotate: 360 } : { rotate: 0 }}
                         transition={{ repeat: Infinity, duration: 12, ease: "linear" }}
-                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-emerald-950 border-[3px] border-[#70E000] flex items-center justify-center shadow-lg relative"
+                        className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-emerald-950 border-[3px] border-[#006400] flex items-center justify-center shadow-lg relative"
                       >
                         <Music className="w-8 h-8 text-emerald-200" />
                         <div className="absolute w-4 h-4 rounded-full bg-white border-2 border-emerald-950 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
@@ -371,13 +371,13 @@ export default function TagBeats() {
                     </div>
 
                     {/* Song Meta Descriptions */}
-                    <h2 className="text-[#70E000] font-sans font-black text-lg sm:text-xl tracking-tight mt-6 leading-tight">
+                    <h2 className="text-[#006400] font-sans font-black text-lg sm:text-xl tracking-tight mt-6 leading-tight">
                       {activeTrack ? activeTrack.title : "No Track Selected"}
                     </h2>
-                    <p className="text-[#9EF01A] text-xs sm:text-sm mt-1.5 font-mono tracking-wider font-extrabold uppercase">
+                    <p className="text-[#006400] text-xs sm:text-sm mt-1.5 font-mono tracking-wider font-extrabold uppercase">
                       {activeTrack ? activeTrack.artist : "Unknown Performer"}
                     </p>
-                    <span className="mt-3 px-3 py-1 rounded bg-emerald-50 border border-emerald-100 text-[9px] font-mono uppercase tracking-widest text-[#70E000] font-extrabold badge-tag-custom">
+                    <span className="mt-3 px-3 py-1 rounded bg-emerald-50 border border-emerald-100 text-[9px] font-mono uppercase tracking-widest text-[#006400] font-extrabold badge-tag-custom">
                       {activeTrack ? activeTrack.category : "Midi Track"}
                     </span>
                   </div>
@@ -400,7 +400,7 @@ export default function TagBeats() {
                             duration: 0.6 + (idx % 4) * 0.15,
                             ease: "easeInOut"
                           }}
-                          className="w-1.5 rounded-t-sm bg-gradient-to-t from-[#70E000] to-emerald-400"
+                          className="w-1.5 rounded-t-sm bg-gradient-to-t from-[#006400] to-emerald-400"
                         />
                       );
                     })}
@@ -415,7 +415,7 @@ export default function TagBeats() {
                       max="100"
                       value={duration > 0 ? (currentTime / duration) * 100 : 0}
                       onChange={handleScrubChange}
-                      className="w-full accent-[#70E000] h-1.5 bg-emerald-50 rounded-lg cursor-pointer transition-all hover:bg-emerald-100/60"
+                      className="w-full accent-[#006400] h-1.5 bg-emerald-50 rounded-lg cursor-pointer transition-all hover:bg-emerald-100/60"
                     />
                     <div className="flex justify-between items-center text-[10px] font-mono text-stone-500">
                       <span>{formatTime(currentTime)}</span>
@@ -430,7 +430,7 @@ export default function TagBeats() {
                       onClick={() => setIsLooping(!isLooping)}
                       className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
                         isLooping 
-                          ? "text-[#70E000] border-[#70E000]/30 bg-emerald-50" 
+                          ? "text-[#006400] border-[#006400]/30 bg-emerald-50" 
                           : "text-stone-400 border-transparent hover:text-stone-700"
                       }`}
                       title="Loop Current Track"
@@ -442,14 +442,14 @@ export default function TagBeats() {
                     <div className="flex items-center gap-3">
                       <button
                         onClick={handlePrevTrack}
-                        className="p-3 rounded-full bg-emerald-50 hover:bg-emerald-100/60 text-[#70E000] border border-emerald-100/30 active:scale-95 transition-all cursor-pointer"
+                        className="p-3 rounded-full bg-emerald-50 hover:bg-emerald-100/60 text-[#006400] border border-emerald-100/30 active:scale-95 transition-all cursor-pointer"
                       >
-                        <SkipBack className="w-4 h-4 fill-[#70E000]" />
+                        <SkipBack className="w-4 h-4 fill-[#006400]" />
                       </button>
 
                       <button
                         onClick={togglePlay}
-                        className="p-4 sm:p-5 rounded-full bg-[#70E000] hover:bg-[#9EF01A] text-white hover:scale-103 shadow-lg hover:shadow-emerald-900/10 font-extrabold active:scale-95 transition-all cursor-pointer flex items-center justify-center h-14 w-14 sm:h-16 sm:w-16 btn-primary-custom"
+                        className="p-4 sm:p-5 rounded-full bg-[#006400] hover:bg-[#38B000] text-white hover:scale-103 shadow-lg hover:shadow-emerald-900/10 font-extrabold active:scale-95 transition-all cursor-pointer flex items-center justify-center h-14 w-14 sm:h-16 sm:w-16 btn-primary-custom"
                       >
                         {isPlaying ? (
                           <Pause className="w-6 h-6 fill-white text-white stroke-[2.5]" />
@@ -460,9 +460,9 @@ export default function TagBeats() {
 
                       <button
                         onClick={handleNextTrack}
-                        className="p-3 rounded-full bg-emerald-50 hover:bg-emerald-100/60 text-[#70E000] border border-emerald-100/30 active:scale-95 transition-all cursor-pointer"
+                        className="p-3 rounded-full bg-emerald-50 hover:bg-emerald-100/60 text-[#006400] border border-emerald-100/30 active:scale-95 transition-all cursor-pointer"
                       >
-                        <SkipForward className="w-4 h-4 fill-[#70E000]" />
+                        <SkipForward className="w-4 h-4 fill-[#006400]" />
                       </button>
                     </div>
 
@@ -475,7 +475,7 @@ export default function TagBeats() {
                         {isMuted || volume === 0 ? (
                           <VolumeX className="w-4 h-4 text-stone-400" />
                         ) : (
-                          <Volume2 className="w-4 h-4 text-[#70E000]" />
+                          <Volume2 className="w-4 h-4 text-[#006400]" />
                         )}
                       </button>
                       <input
@@ -485,10 +485,10 @@ export default function TagBeats() {
                         step="0.01"
                         value={isMuted ? 0 : volume}
                         onChange={(e) => {
-                          setVolume(parseFloat(e.target.value));
-                          setIsMuted(false);
+                           setVolume(parseFloat(e.target.value));
+                           setIsMuted(false);
                         }}
-                        className="w-16 accent-[#70E000] h-1 bg-stone-100 rounded-lg cursor-pointer"
+                        className="w-16 accent-[#006400] h-1 bg-stone-100 rounded-lg cursor-pointer"
                       />
                     </div>
                   </div>
@@ -496,7 +496,7 @@ export default function TagBeats() {
                   {/* Explicit Download Action Card inside active deck */}
                   <div className="mt-6 bg-emerald-50/50 border border-emerald-100/40 rounded-2xl p-4 flex items-center justify-between">
                     <div>
-                      <span className="text-[10px] font-mono uppercase text-[#70E000] font-extrabold block">AVAILABLE FOR OFFLINE EXPORT</span>
+                      <span className="text-[10px] font-mono uppercase text-[#006400] font-extrabold block">AVAILABLE FOR OFFLINE EXPORT</span>
                       <span className="text-[11px] font-sans text-stone-600 block mt-0.5 text-ellipsis overflow-hidden">High definition audio track</span>
                     </div>
                     {activeTrack && (
@@ -505,7 +505,7 @@ export default function TagBeats() {
                         className={`px-4 py-2 rounded-xl text-[10px] font-mono font-extrabold uppercase tracking-widest flex items-center gap-1.5 border transition-all cursor-pointer ${
                           downloadSuccessId === activeTrack.id
                             ? "bg-emerald-600 border-[#10b981] text-white"
-                            : "bg-[#70E000] hover:bg-[#9EF01A] text-white border-transparent shadow-md font-black btn-primary-custom"
+                            : "bg-[#006400] hover:bg-[#38B000] text-white border-transparent shadow-md font-black btn-primary-custom"
                         }`}
                       >
                         {downloadSuccessId === activeTrack.id ? (
@@ -531,8 +531,8 @@ export default function TagBeats() {
                 
                 {/* Playlist search bar */}
                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-stretch sm:items-center p-5 rounded-3xl bg-emerald-50/30 border border-emerald-100/60" id="playlist-header-nav">
-                  <h3 className="font-sans font-black text-[#2A7221] text-base sm:text-lg flex items-center gap-2 select-none">
-                    <Music className="w-4 h-4 text-[#2A7221]" /> Compositions Index
+                  <h3 className="font-sans font-black text-[#006400] text-base sm:text-lg flex items-center gap-2 select-none">
+                    <Music className="w-4 h-4 text-[#006400]" /> Compositions Index
                   </h3>
                   
                   <div className="relative max-w-sm w-full" id="playlist-search-box">
@@ -542,7 +542,7 @@ export default function TagBeats() {
                       placeholder="Search tracks, genres..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-2 bg-white border border-emerald-100/60 hover:border-emerald-200 rounded-xl text-stone-800 text-xs focus:outline-none focus:border-[#2A7221] focus:bg-emerald-50/20 transition-all font-sans placeholder-stone-400"
+                      className="w-full pl-10 pr-4 py-2 bg-white border border-emerald-100/60 hover:border-emerald-200 rounded-xl text-stone-800 text-xs focus:outline-none focus:border-[#006400] focus:bg-emerald-50/20 transition-all font-sans placeholder-stone-400"
                     />
                   </div>
                 </div>
@@ -557,14 +557,14 @@ export default function TagBeats() {
                         key={track.id}
                         className={`p-4 sm:p-5 flex items-center justify-between transition-all cursor-pointer select-none border-l-[3px] ${
                           isSelected 
-                            ? "bg-emerald-50/60 border-[#70E000] text-[#70E000] shadow-inner font-bold" 
+                            ? "bg-emerald-50/60 border-[#006400] text-[#006400] shadow-inner font-bold" 
                             : "hover:bg-emerald-50/10 border-transparent text-stone-700"
                         }`}
                         onClick={() => selectTrack(idx)}
                       >
                         <div className="flex items-center gap-4 text-left">
                           {/* Play State Indicator Bullet */}
-                          <div className="w-6 h-6 rounded-md bg-emerald-50/60 border border-emerald-100/30 flex items-center justify-center text-[10px] font-mono font-bold text-[#70E000]">
+                          <div className="w-6 h-6 rounded-md bg-emerald-50/60 border border-emerald-100/30 flex items-center justify-center text-[10px] font-mono font-bold text-[#006400]">
                             {isSelected && isPlaying ? (
                               <motion.div 
                                 animate={{ scale: [1, 1.2, 1] }}
@@ -572,21 +572,21 @@ export default function TagBeats() {
                                 className="w-2.5 h-2.5 rounded-full bg-[#10b981]"
                               />
                             ) : (
-                              <span className="text-[#70E000]/70">{(idx + 1).toString().padStart(2, "0")}</span>
+                              <span className="text-[#006400]/70">{(idx + 1).toString().padStart(2, "0")}</span>
                             )}
                           </div>
 
                           {/* Track details descriptions */}
                           <div>
                             <h4 className={`font-sans font-black text-sm tracking-tight ${
-                              isSelected ? "text-[#70E000]" : "text-stone-800"
+                              isSelected ? "text-[#006400]" : "text-stone-800"
                             }`}>
                               {track.title}
                             </h4>
                             <p className="text-stone-500 text-xs mt-0.5 font-medium flex items-center gap-1.5 sm:gap-2.5">
                               <span>{track.artist}</span>
-                              <span className="w-1 h-1 rounded-full bg-[#70E000]/20" />
-                              <span className="text-[10px] font-mono bg-emerald-50 border border-emerald-100/20 px-2 py-0.5 rounded text-[#70E000] badge-tag-custom">{track.category}</span>
+                              <span className="w-1 h-1 rounded-full bg-[#006400]/20" />
+                              <span className="text-[10px] font-mono bg-emerald-50 border border-emerald-100/20 px-2 py-0.5 rounded text-[#006400] badge-tag-custom">{track.category}</span>
                             </p>
                           </div>
                         </div>
@@ -602,7 +602,7 @@ export default function TagBeats() {
                               e.stopPropagation();
                               handleDownload(track);
                             }}
-                            className={`p-2 rounded-lg border border-transparent hover:border-emerald-100/50 text-[#70E000]/50 hover:text-[#70E000] transition-all cursor-pointer ${
+                            className={`p-2 rounded-lg border border-transparent hover:border-emerald-100/50 text-[#006400]/50 hover:text-[#006400] transition-all cursor-pointer ${
                               downloadSuccessId === track.id ? "bg-emerald-50 text-emerald-600" : ""
                             }`}
                             title="Download MP3 File"
@@ -620,7 +620,7 @@ export default function TagBeats() {
 
                   {filteredTracks.length === 0 && (
                     <div className="py-16 text-center" id="empty-playlist">
-                      <Sparkles className="w-8 h-8 text-[#70E000] mx-auto opacity-35 animate-pulse mb-3" />
+                      <Sparkles className="w-8 h-8 text-[#006400] mx-auto opacity-35 animate-pulse mb-3" />
                       <h3 className="text-stone-700 font-sans font-bold text-sm">No Music Matches</h3>
                       <p className="text-stone-500 text-xs mt-1 bg-stone-50 border border-stone-100 inline-block px-3 py-1 rounded-full">Try searching for other local music files</p>
                     </div>
@@ -638,9 +638,9 @@ export default function TagBeats() {
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 1.2, ease: "linear" }}
-                className="w-10 h-10 border-4 border-[#70E000] border-t-transparent rounded-full mx-auto mb-4"
+                className="w-10 h-10 border-4 border-[#006400] border-t-transparent rounded-full mx-auto mb-4"
               />
-              <span className="font-mono text-xs text-[#70E000] uppercase tracking-widest font-extrabold block animate-pulse">Scanning track database...</span>
+              <span className="font-mono text-xs text-[#006400] uppercase tracking-widest font-extrabold block animate-pulse">Scanning track database...</span>
             </div>
           )}
 
