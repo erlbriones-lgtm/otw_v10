@@ -99,6 +99,41 @@ export const TagbilaranDashboard: React.FC = () => {
 
   useEffect(() => {
     setTopCardIdx(0);
+
+    // Predictive Background Image Preloader
+    // Preloads the active, next, and previous barangay pictures immediately so they are hot in the browser cache.
+    const activeIndex = tagbilaranBarangays.findIndex(b => b.name === selectedBarangay);
+    if (activeIndex !== -1) {
+      const adjacentIndices = [
+        activeIndex,
+        (activeIndex + 1) % tagbilaranBarangays.length,
+        (activeIndex - 1 + tagbilaranBarangays.length) % tagbilaranBarangays.length
+      ];
+
+      adjacentIndices.forEach(idx => {
+        const bName = tagbilaranBarangays[idx]?.name;
+        if (bName) {
+          getTriosForBarangay(bName).forEach(url => {
+            const img = new Image();
+            img.src = url;
+          });
+        }
+      });
+    }
+
+    // Sequentially preload all other barangay pictures after a subtle delay to keep initial rendering thread unblocked.
+    const idlePreload = setTimeout(() => {
+      Object.keys(barangayImageTrios).forEach(bName => {
+        if (bName !== selectedBarangay) {
+          getTriosForBarangay(bName).forEach(url => {
+            const img = new Image();
+            img.src = url;
+          });
+        }
+      });
+    }, 1200);
+
+    return () => clearTimeout(idlePreload);
   }, [selectedBarangay]);
 
   const currentIndex = tagbilaranBarangays.findIndex(b => b.name === selectedBarangay);
@@ -221,6 +256,7 @@ export const TagbilaranDashboard: React.FC = () => {
                   key={`${activeBarangay.name}-card-${idx}`}
                   style={{
                     zIndex: zIndex,
+                    willChange: "transform, opacity",
                   }}
                   animate={{
                     x: xOffset,
@@ -271,6 +307,8 @@ export const TagbilaranDashboard: React.FC = () => {
                       src={imgUrl} 
                       alt={`${activeBarangay.name} historic heritage sight`}
                       referrerPolicy="no-referrer"
+                      loading="eager"
+                      decoding="async"
                       className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
                     />
                   </div>
