@@ -1,12 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
-import { 
-  ChevronLeft, 
-  ChevronRight, 
-} from "lucide-react";
 import { tagbilaranBarangays } from "../data";
+import { ArrowLeft, ArrowRight, Compass, Eye, Image as ImageIcon, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Explicit visual mapping matching real local scenic assets (3 distinct images per Barangay)
+// Explicit visual mapping matching real local scenic assets (each Barangay has 3 high quality local photos)
 const barangayImageTrios: Record<string, string[]> = {
   "Barangay Bool": [
     "/temp/Blood Compact Shrine (2).webp",
@@ -85,7 +82,7 @@ const barangayImageTrios: Record<string, string[]> = {
   ]
 };
 
-const getTriosForBarangay = (name: string): string[] => {
+const getImagesForBarangay = (name: string): string[] => {
   return barangayImageTrios[name] || [
     "/temp/Poblacion 1, Tagbilaran City (2).webp",
     "/temp/Poblacion 1, Tagbilaran City (1).webp",
@@ -94,290 +91,264 @@ const getTriosForBarangay = (name: string): string[] => {
 };
 
 export const TagbilaranDashboard: React.FC = () => {
-  const [selectedBarangay, setSelectedBarangay] = useState<string>("Barangay Bool");
-  const [topCardIdx, setTopCardIdx] = useState<number>(0);
+  const [selectedBarangay, setSelectedBarangay] = useState("Barangay Bool");
+  const [rotation, setRotation] = useState<number>(0);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [startX, setStartX] = useState<number>(0);
+  const [startRotation, setStartRotation] = useState<number>(0);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
 
+  const activeImages = getImagesForBarangay(selectedBarangay);
+  const numItems = activeImages.length; // 3
+  const angleStep = 360 / numItems; // 120 degrees
+
+  // Detect mobile width dynamically to provide optimal 3D metrics
   useEffect(() => {
-    setTopCardIdx(0);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    // Predictive Background Image Preloader
-    // Preloads the active, next, and previous barangay pictures immediately so they are hot in the browser cache.
-    const activeIndex = tagbilaranBarangays.findIndex(b => b.name === selectedBarangay);
-    if (activeIndex !== -1) {
-      const adjacentIndices = [
-        activeIndex,
-        (activeIndex + 1) % tagbilaranBarangays.length,
-        (activeIndex - 1 + tagbilaranBarangays.length) % tagbilaranBarangays.length
-      ];
-
-      adjacentIndices.forEach(idx => {
-        const bName = tagbilaranBarangays[idx]?.name;
-        if (bName) {
-          getTriosForBarangay(bName).forEach(url => {
-            const img = new Image();
-            img.src = url;
-          });
-        }
-      });
-    }
-
-    // Sequentially preload all other barangay pictures after a subtle delay to keep initial rendering thread unblocked.
-    const idlePreload = setTimeout(() => {
-      Object.keys(barangayImageTrios).forEach(bName => {
-        if (bName !== selectedBarangay) {
-          getTriosForBarangay(bName).forEach(url => {
-            const img = new Image();
-            img.src = url;
-          });
-        }
-      });
-    }, 1200);
-
-    return () => clearTimeout(idlePreload);
+  // Reset rotation when selected barangay transitions to avoid sudden jumps
+  useEffect(() => {
+    setRotation(0);
   }, [selectedBarangay]);
 
-  const currentIndex = tagbilaranBarangays.findIndex(b => b.name === selectedBarangay);
-  const activeBarangay = tagbilaranBarangays[currentIndex] || tagbilaranBarangays[0];
+  // Determine active photo index nearest to camera (0, 1, or 2)
+  let activeIndex = Math.round(-rotation / angleStep) % numItems;
+  if (activeIndex < 0) {
+    activeIndex += numItems;
+  }
 
-  const handlePrev = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    const prevIdx = (currentIndex - 1 + tagbilaranBarangays.length) % tagbilaranBarangays.length;
-    setSelectedBarangay(tagbilaranBarangays[prevIdx].name);
-  };
+  // Snapping logic: snaps to the nearest photograph after idle
+  useEffect(() => {
+    if (isDragging) return;
 
-  const handleNext = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    const nextIdx = (currentIndex + 1) % tagbilaranBarangays.length;
-    setSelectedBarangay(tagbilaranBarangays[nextIdx].name);
-  };
-
-  // Stagger variants for smooth photo reveals
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
+    const snapTimeout = setTimeout(() => {
+      const snapped = Math.round(rotation / angleStep) * angleStep;
+      if (snapped !== rotation) {
+        setRotation(snapped);
       }
-    }
+    }, 400);
+
+    return () => clearTimeout(snapTimeout);
+  }, [rotation, isDragging, angleStep]);
+
+  // Preloading all pictures for 60FPS instant rendering
+  useEffect(() => {
+    const idlePreload = setTimeout(() => {
+      Object.keys(barangayImageTrios).forEach((bName) => {
+        getImagesForBarangay(bName).forEach((url) => {
+          const img = new Image();
+          img.src = url;
+        });
+      });
+    }, 1200);
+    return () => clearTimeout(idlePreload);
+  }, []);
+
+  // Responsive perspective dimensions for 3 items (made significantly larger!)
+  const cardWidth = isMobile ? 320 : 640;
+  const cardHeight = isMobile ? 220 : 420;
+  const cylinderRadius = isMobile ? 125 : 240; // Ideal spreading for equilateral triangle 3D formation
+
+  // Drag interaction handlers
+  const handleDragStart = (clientX: number) => {
+    setIsDragging(true);
+    setStartX(clientX);
+    setStartRotation(rotation);
   };
 
-  const cardVariants = {
-    hidden: { opacity: 0, y: 15, scale: 0.98 },
-    show: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1,
-      transition: { 
-        type: "spring",
-        stiffness: 90,
-        damping: 14,
-      }
-    }
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging) return;
+    const deltaX = clientX - startX;
+    const dragSensitivity = isMobile ? 0.35 : 0.22;
+    setRotation(startRotation + deltaX * dragSensitivity);
   };
+
+  const handleDragEnd = () => {
+    if (!isDragging) return;
+    setIsDragging(false);
+  };
+
+  // Scroll wheel rotation proxy
+  const handleWheel = (e: React.WheelEvent) => {
+    const scrollSensitivity = 0.06;
+    setRotation((prev) => prev - e.deltaY * scrollSensitivity);
+  };
+
+  // Spin active cylinder slot controllers
+  const spinNext = () => {
+    setRotation((prev) => prev - angleStep);
+  };
+
+  const spinPrev = () => {
+    setRotation((prev) => prev + angleStep);
+  };
+
+  const selectNextBarangay = () => {
+    const currentIndex = tagbilaranBarangays.findIndex((b) => b.name === selectedBarangay);
+    const nextIndex = (currentIndex + 1) % tagbilaranBarangays.length;
+    setSelectedBarangay(tagbilaranBarangays[nextIndex].name);
+  };
+
+  const selectPrevBarangay = () => {
+    const currentIndex = tagbilaranBarangays.findIndex((b) => b.name === selectedBarangay);
+    const prevIndex = (currentIndex - 1 + tagbilaranBarangays.length) % tagbilaranBarangays.length;
+    setSelectedBarangay(tagbilaranBarangays[prevIndex].name);
+  };
+
+  const activeBarangayData = tagbilaranBarangays.find((b) => b.name === selectedBarangay) || tagbilaranBarangays[0];
 
   return (
-    <div className="w-full relative" id="barangay-interactive-showcase">
-      {/* Hide scrollbars style component for swipe gallery responsiveness */}
-      <style>{`
-        #barangay-swipe-track::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
+    <div className="w-full relative flex flex-col items-center bg-[#fff] py-2 overflow-visible select-none text-[#05461a]">
 
-      <motion.div
-        key="carousel-view"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-6xl mx-auto flex flex-col items-center pt-2 pb-6 select-none text-[#2A7221]"
+      {/* BARANGAY MASTER LOGO HEADER */}
+      <div className="text-center mb-4 flex flex-col justify-center items-center" id="active-barangay-title-section">
+        <h3 className="font-serif font-[900] text-3.5xl sm:text-5xl md:text-6xl text-[#05461a] tracking-widest uppercase transition-all duration-300">
+          {activeBarangayData.name.replace("Barangay ", "")}
+        </h3>
+        <p className="font-jakarta text-[9px] sm:text-xs text-[#05461a]/50 tracking-[0.2em] uppercase font-extrabold mt-2.5">
+          {activeBarangayData.heritage}
+        </p>
+      </div>
+
+      {/* 3D PERSPECTIVE CYLINDER PLATFORM WORKSPACE */}
+      <div 
+        className="relative w-full max-w-full h-[290px] sm:h-[480px] md:h-[510px] flex items-center justify-center overflow-visible select-none cursor-grab active:cursor-grabbing"
+        onMouseDown={(e) => handleDragStart(e.clientX)}
+        onMouseMove={(e) => handleDragMove(e.clientX)}
+        onMouseUp={handleDragEnd}
+        onMouseLeave={handleDragEnd}
+        onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
+        onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
+        onTouchEnd={handleDragEnd}
+        onWheel={handleWheel}
+        style={{
+          perspective: isMobile ? "800px" : "1300px",
+          perspectiveOrigin: "50% 50%"
+        }}
+        id="carousel-3d-perspective-stage"
       >
-        {/* Elegant Dynamic Header showing current Barangay name */}
-        <div className="w-full max-w-3xl mx-auto mb-3 text-center animate-fade-in" id="barangay-title-header">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeBarangay.name}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              transition={{ duration: 0.35, ease: "easeOut" }}
-            >
-              <h3 className="font-serif font-black text-5xl sm:text-7xl lg:text-8xl text-[#2A7221] tracking-widest uppercase">
-                {activeBarangay.name.replace("Barangay ", "")}
-              </h3>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* 1. Playing Cards Pile - 3 Overlapping cards with smooth fan and responsive interactive swipe */}
+        
+        {/* REVOLVING CYLINDRICAL TRIANGULAR RING CONTAINER */}
         <div 
-          className="relative w-full max-w-[94%] sm:max-w-[85%] md:max-w-4xl lg:max-w-5xl h-[280px] sm:h-[360px] md:h-[440px] lg:h-[480px] flex items-center justify-center my-6 overflow-visible"
-          id="barangay-playing-cards-stack"
+          className="relative flex items-center justify-center pointer-events-auto"
+          style={{
+            transformStyle: "preserve-3d",
+            transform: `rotateY(${rotation}deg)`,
+            width: `${cardWidth}px`,
+            height: `${cardHeight}px`,
+            transition: isDragging ? "none" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
+          }}
+          id="cylindrical-rotating-ring"
         >
-          <AnimatePresence mode="popLayout">
-            {getTriosForBarangay(activeBarangay.name).map((imgUrl, idx) => {
-              // Calculate relative order in stacking based on topCardIdx
-              const order = (idx - topCardIdx + 3) % 3;
-              const isTop = order === 0;
+          {activeImages.map((imgUrl, i) => {
+            const cardRotation = i * angleStep;
+            
+            // Depth-of-Field physics modeling: relative angle calculation
+            let relativeAngle = (cardRotation + rotation) % 360;
+            if (relativeAngle > 180) relativeAngle -= 360;
+            if (relativeAngle < -180) relativeAngle += 360;
+            
+            const absAngle = Math.abs(relativeAngle);
+            const frontWeight = Math.max(0, 1 - absAngle / 180);
+            
+            // Scale and fade items nicely as they orbit behind
+            const opacity = 0.35 + 0.65 * Math.pow(frontWeight, 2);
+            const scale = 0.88 + 0.12 * frontWeight;
+            const zIndex = Math.round(frontWeight * 100);
+            const blurPx = `${(1 - frontWeight) * 4}px`;
 
-              // Design spatial offsets mimicking beautifully handheld overlapping cards
-              let xOffset = 0;
-              let yOffset = 0;
-              let rotation = 0;
-              let scale = 1;
-              let zIndex = 30;
-
-              if (order === 0) {
-                // Top, active card in focus
-                zIndex = 30;
-                scale = 1;
-                rotation = -1.2;
-                xOffset = 0;
-                yOffset = 0;
-              } else if (order === 1) {
-                // Second card peeking to the right
-                zIndex = 20;
-                scale = 0.96;
-                rotation = 4.5;
-                xOffset = 55; // visually peeking more
-                yOffset = 6;  // slight tilt down
-              } else if (order === 2) {
-                // Third card peeking to the left
-                zIndex = 10;
-                scale = 0.93;
-                rotation = -6;
-                xOffset = -55; // visually peeking more
-                yOffset = 10;  // slight tilt down
-              }
-
-              return (
-                <motion.div
-                  key={`${activeBarangay.name}-card-${idx}`}
-                  style={{
-                    zIndex: zIndex,
-                    willChange: "transform, opacity",
-                  }}
-                  animate={{
-                    x: xOffset,
-                    y: yOffset,
-                    rotate: rotation,
-                    scale: scale,
-                  }}
-                  whileHover={!isTop ? {
-                    x: order === 1 ? 85 : -85,
-                    rotate: order === 1 ? 6 : -8,
-                    scale: 0.98,
-                    transition: { duration: 0.25, ease: "easeOut" }
-                  } : {
-                    scale: 1.01,
-                    transition: { duration: 0.25, ease: "easeOut" }
-                  }}
-                  transition={{
-                    type: "spring",
-                    stiffness: 140,
-                    damping: 18,
-                    mass: 0.8
-                  }}
-                  drag={isTop ? "x" : false}
-                  dragConstraints={{ left: 0, right: 0 }}
-                  dragElastic={0.6}
-                  whileDrag={{ scale: 1.03, rotate: 0, zIndex: 50 }}
-                  onDragEnd={(event, info) => {
-                    const threshold = 80;
-                    if (info.offset.x > threshold || info.offset.x < -threshold) {
-                      setTopCardIdx((prev) => (prev + 1) % 3);
-                    }
-                  }}
-                  onTap={() => {
-                    if (!isTop) {
-                      setTopCardIdx(idx);
-                    }
-                  }}
+            return (
+              <div
+                key={`${selectedBarangay}-image-slot-${i}`}
+                className="absolute inset-0 select-none pb-4"
+                style={{
+                  transform: `rotateY(${cardRotation}deg) translateZ(${cylinderRadius}px) scale(${scale})`,
+                  width: `${cardWidth}px`,
+                  height: `${cardHeight}px`,
+                  opacity: opacity,
+                  filter: `blur(${blurPx})`,
+                  zIndex: zIndex,
+                  backfaceVisibility: "hidden",
+                  pointerEvents: frontWeight > 0.45 ? "auto" : "none",
+                  transition: "opacity 0.35s, filter 0.35s"
+                }}
+                id={`cylinder-ring-slot-${i}`}
+              >
+                
+                {/* PICTURE DISPLAY SHIELD: BORDERLESS HIGH CONTRAST */}
+                <div 
+                  className="w-full h-full bg-white border border-neutral-150 rounded-[20px] shadow-2xl p-1 pointer-events-auto flex flex-col justify-between overflow-hidden transform transition-all duration-300 hover:scale-[1.03] group relative cursor-pointer"
                   onClick={() => {
-                    if (!isTop) {
-                      setTopCardIdx(idx);
-                    }
+                    const shortestAngle = -cardRotation;
+                    setRotation(shortestAngle);
                   }}
-                  className={`absolute w-[88vw] sm:w-[84vw] md:w-[74vw] lg:w-[780px] xl:w-[860px] h-[220px] sm:h-[300px] md:h-[380px] lg:h-[420px] bg-white border border-neutral-100/90 rounded-[20px] sm:rounded-[24px] shadow-2xl p-1 sm:p-1.5 select-none cursor-${isTop ? "grab" : "pointer"} flex flex-col active:cursor-grabbing transition-all duration-300 hover:shadow-emerald-900/5`}
                 >
-                  {/* Pristine Inner Photo Framing with Delicate Borders - thinned border space inside */}
-                  <div className="w-full h-full rounded-[16px] sm:rounded-[20px] overflow-hidden relative bg-neutral-100">
+                  <div className="w-full h-full rounded-[16px] overflow-hidden relative bg-neutral-100 flex items-center justify-center">
                     <img 
                       src={imgUrl} 
-                      alt={`${activeBarangay.name} historic heritage sight`}
+                      alt={`${selectedBarangay} local spot ${i + 1}`}
                       referrerPolicy="no-referrer"
-                      loading="eager"
-                      decoding="async"
-                      className="absolute inset-0 w-full h-full object-cover pointer-events-none select-none"
+                      className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none group-hover:scale-105 transition-transform duration-500"
                     />
+                    
+                    {/* Shadow overlay gradient */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+
+                    {/* Minimalist image indicator watermark */}
+                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/45 backdrop-blur-md rounded-md font-sans text-[8px] uppercase tracking-widest text-[#fff] font-bold inline-flex items-center gap-1.5 select-none pointer-events-none">
+                      <ImageIcon className="w-3 h-3 text-emerald-300" /> Spot {i + 1}
+                    </div>
                   </div>
-                </motion.div>
+                </div>
+
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* RUSTIC COMPASS FLING CONTROLS */}
+      <div className="flex flex-col items-center gap-2 mt-2 select-none" id="carousel-navigation-dock">
+        <div className="flex items-center gap-4">
+          <button
+            onClick={spinPrev}
+            title="Rotate Left"
+            className="w-11 h-11 rounded-full border border-[#05461a]/15 bg-emerald-50/40 text-[#05461a] flex items-center justify-center hover:bg-[#05461a] hover:text-white transition-all cursor-pointer select-none active:scale-90"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </button>
+          
+          {/* Active Image Indicator Dots */}
+          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#05461a]/5 rounded-full border border-[#05461a]/10">
+            {activeImages.map((_, dotIdx) => {
+              const worksAsActive = dotIdx === activeIndex;
+              return (
+                <div 
+                  key={`dot-${dotIdx}`}
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    worksAsActive ? "w-4 bg-[#05461a]" : "w-1.5 bg-[#05461a]/20"
+                  }`}
+                />
               );
             })}
-          </AnimatePresence>
-        </div>
+          </div>
 
-        {/* Tactile Chevron Navigation Controls */}
-        <div 
-          className="w-full flex items-center justify-center gap-6 sm:gap-8 z-30 mb-2 py-1" 
-          id="barangay-nav-arrows-container"
-        >
-          {/* Left Cycle Button */}
-          <motion.button
-            onClick={handlePrev}
-            whileHover={{ scale: 1.15, x: -2 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-11 h-11 rounded-full bg-white border-2 border-[#9DC09D] hover:border-[#2A7221] text-[#2A7221] shadow-lg flex items-center justify-center cursor-pointer select-none transition-all duration-300"
-            title="Previous Barangay"
-            id="cycle-prev-wave"
+          <button
+            onClick={spinNext}
+            title="Rotate Right"
+            className="w-11 h-11 rounded-full border border-[#05461a]/15 bg-emerald-50/40 text-[#05461a] flex items-center justify-center hover:bg-[#05461a] hover:text-white transition-all cursor-pointer select-none active:scale-90"
           >
-            <ChevronLeft className="w-5 h-5" />
-          </motion.button>
-
-          {/* Right Cycle Button */}
-          <motion.button
-            onClick={handleNext}
-            whileHover={{ scale: 1.15, x: 2 }}
-            whileTap={{ scale: 0.9 }}
-            className="w-11 h-11 rounded-full bg-white border-2 border-[#9DC09D] hover:border-[#2A7221] text-[#2A7221] shadow-lg flex items-center justify-center cursor-pointer select-none transition-all duration-300"
-            title="Next Barangay"
-            id="cycle-next-wave"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </motion.button>
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
+      </div>
 
-        {/* 2. Horizontal Separator */}
-        <div 
-          className="w-full relative flex items-center justify-center my-4 sm:my-5 h-12"
-          id="barangay-navigator-separator"
-        >
-          <img 
-            src="/temp/divider2.png" 
-            alt="Separator Decor" 
-            className="absolute left-0 right-0 w-full h-10 sm:h-12 object-contain pointer-events-none opacity-90 z-20" 
-            id="hand-drawn-rustic-divider"
-          />
-        </div>
-
-        {/* 3. Centered Description of the Barangay */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedBarangay}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.35 }}
-            className="text-center px-4 sm:px-12 py-2 max-w-3xl space-y-4"
-            id="barangay-description-frame"
-          >
-            <p className="font-sans text-lg sm:text-2xl text-[#2E7D32] leading-relaxed italic font-medium tracking-wide">
-              "{activeBarangay.desc}"
-            </p>
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
     </div>
   );
 };

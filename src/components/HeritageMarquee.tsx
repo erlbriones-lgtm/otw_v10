@@ -42,8 +42,8 @@ const row1Cards: MarqueeCardProps[] = [
   },
   {
     id: "garden-cafe",
-    title: "Garden Café",
-    category: "Cultural Café",
+    title: "Garden Cafe",
+    category: "Cultural Cafe",
     district: "Poblacion",
     image: "/webp/Poblacion%201,%20Tagbilaran%20City%20(1)%20(1).webp",
     desc: "A social enterprise serving great food and supporting the deaf community since development."

@@ -133,14 +133,14 @@ export const detailedHeritageList: DetailedHeritage[] = [
   },
   {
     id: "garden-cafe",
-    title: "Garden Café",
-    category: "Cultural Café",
+    title: "Garden Cafe",
+    category: "Cultural Cafe",
     district: "Spanish Era",
     tagline: "A unique restaurant serving excellent food and supporting the local deaf community.",
     mainImage: "/webp/Poblacion%201,%20Tagbilaran%20City%20(2).webp",
     images: ["/webp/Poblacion%201,%20Tagbilaran%20City%20(2).webp", "/webp/Old%20House%20in%20Poblacion%201%20(3).webp"],
-    description: "Seize the chance to take that Instagram-worthy selfie with Garden Café's latest feature, the tarantilla (a horse-drawn covered wagon) which served as the main mode of transportation in Tagbilaran during the Spanish Era in the 1800s. Munch on one of the best-selling items on their menu while you enjoy a unique dining experience being served by hearing-impaired/deaf staff. You may learn a few sign language as the menu includes hand signals to aid customers.",
-    longHistory: "Founded as a civic social enterprise, the Garden Café not only offers a wonderful, ambient garden dining space but also integrates inclusive work practices. It provides meaningful employment to highly capable hearing-impaired and deaf youth from Tagbilaran. The eatery showcases vintage local artifacts, and is centered around an authentic, beautifully reconstructed 'tarantilla' wagon from the Spanish colonial century, offering customers both physical history and heartwarming social impact.",
+    description: "Seize the chance to take that Instagram-worthy selfie with Garden Cafe's latest feature, the tarantilla (a horse-drawn covered wagon) which served as the main mode of transportation in Tagbilaran during the Spanish Era in the 1800s. Munch on one of the best-selling items on their menu while you enjoy a unique dining experience being served by hearing-impaired/deaf staff. You may learn a few sign language as the menu includes hand signals to aid customers.",
+    longHistory: "Founded as a civic social enterprise, the Garden Cafe not only offers a wonderful, ambient garden dining space but also integrates inclusive work practices. It provides meaningful employment to highly capable hearing-impaired and deaf youth from Tagbilaran. The eatery showcases vintage local artifacts, and is centered around an authentic, beautifully reconstructed 'tarantilla' wagon from the Spanish colonial century, offering customers both physical history and heartwarming social impact.",
     yearEstablished: "Modern Cultural Landmark",
     facts: [
       { label: "Main Feature", value: "Tarantilla (Authentic Spanish-Era horse-drawn wagon)" },

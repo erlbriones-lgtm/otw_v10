@@ -36,9 +36,9 @@ export const tagbilaranLandmarks: Landmark[] = [
   },
   {
     id: "garden-cafe",
-    title: "Garden Café",
+    title: "Garden Cafe",
     category: "Heritage",
-    description: "Seize the chance to take that Instagram-worthy selfie with Garden Café's latest feature, the tarantilla (a horse-drawn covered wagon) which served as the main mode of transportation in Tagbilaran during the Spanish Era in the 1800s. Enjoy a unique dining experience served by hearing-impaired/deaf staff who teach you a few sign language hand signals.",
+    description: "Seize the chance to take that Instagram-worthy selfie with Garden Cafe's latest feature, the tarantilla (a horse-drawn covered wagon) which served as the main mode of transportation in Tagbilaran during the Spanish Era in the 1800s. Enjoy a unique dining experience served by hearing-impaired/deaf staff who teach you a few sign language hand signals.",
     location: "Poblacion, Tagbilaran City",
     yearEstablished: "Modern Cultural Landmark",
     highlight: "Tarantilla Wagon & Deaf Sign Language Service",
