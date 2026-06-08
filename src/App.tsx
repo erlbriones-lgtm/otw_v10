@@ -35,6 +35,8 @@ import HeritageDetailView from "./components/HeritageDetailView";
 import AboutContact from "./components/AboutContact";
 import PlanVisitModal from "./components/PlanVisitModal";
 import { TagbilaranDashboard } from "./components/TagbilaranDashboard";
+import Saulog from "./components/Saulog";
+import Travel from "./components/Travel";
 
 import { tagbilaranLandmarks, tagbilaranBarangays } from "./data";
 import { detailedHeritageList } from "./data/heritageDetails";
@@ -42,7 +44,7 @@ import { Landmark, LocalStatusResponse, Barangay } from "./types";
 
 export default function App() {
   // Navigation / Theme Styling Switch State
-  const [activeView, setActiveView] = useState<"home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "about">("home");
+  const [activeView, setActiveView] = useState<"home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "saulog" | "travel" | "about">("home");
   const [selectedDetailedHeritageId, setSelectedDetailedHeritageId] = useState<string | null>(null);
   const [showPlanVisitModal, setShowPlanVisitModal] = useState(false);
 
@@ -146,7 +148,7 @@ export default function App() {
     // On top, we overlay beautiful glowing radial circles using softer, extremely polished white and green gradients.
     const gradientCircles = "radial-gradient(circle at 10% 15%, rgba(255, 255, 255, 0.24) 0%, transparent 50%), radial-gradient(circle at 85% 30%, rgba(50, 232, 117, 0.42) 0%, transparent 65%), radial-gradient(circle at 20% 70%, rgba(5, 70, 26, 0.38) 0%, transparent 60%), radial-gradient(circle at 80% 85%, rgba(255, 255, 255, 0.18) 0%, transparent 50%), linear-gradient(to bottom, #32e875 0%, #05461a 95vh, #02200a 100%)";
     
-    if (selectedDetailedHeritageId || activeView === "heritage") {
+    if (selectedDetailedHeritageId || activeView === "heritage" || activeView === "travel") {
       return "#ffffff";
     }
     switch (activeView) {
@@ -159,6 +161,10 @@ export default function App() {
       case "downloadables":
         return "radial-gradient(circle at 15% 15%, rgba(255, 255, 255, 0.22) 0%, transparent 55%), radial-gradient(circle at 75% 30%, rgba(50, 232, 117, 0.38) 0%, transparent 65%), radial-gradient(circle at 30% 70%, rgba(5, 70, 26, 0.35) 0%, transparent 60%), radial-gradient(circle at 85% 85%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), linear-gradient(to bottom, #32e875 0%, #05461a 95vh, #02200a 100%)";
       case "barangay":
+        return "#ffffff";
+      case "saulog":
+        return "#ffffff";
+      case "travel":
         return "#ffffff";
       case "about":
         return "radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.22) 0%, transparent 50%), radial-gradient(circle at 85% 35%, rgba(50, 232, 117, 0.42) 0%, transparent 60%), radial-gradient(circle at 20% 70%, rgba(5, 70, 26, 0.38) 0%, transparent 60%), radial-gradient(circle at 75% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%), linear-gradient(to bottom, #32e875 0%, #05461a 95vh, #02200a 100%)";
@@ -179,7 +185,7 @@ export default function App() {
 
   return (
     <div 
-      className={`min-h-screen transition-all duration-500 font-sans overflow-x-hidden relative ${(selectedDetailedHeritageId || activeView === "heritage") ? "text-[#05461a] bg-white animate-fade-in" : "text-white"}`} 
+      className={`min-h-screen transition-all duration-500 font-sans overflow-x-hidden relative ${(selectedDetailedHeritageId || activeView === "heritage" || activeView === "travel" || activeView === "barangay" || activeView === "saulog" || activeView === "tagbeats") ? "text-[#05461a] bg-white animate-fade-in" : "text-white"}`} 
       style={{ background: getBackgroundStyle() }}
       id="digital-tourism-root"
     >
@@ -276,14 +282,14 @@ export default function App() {
                 <section id="tagbilaran-history" className="text-center max-w-4xl mx-auto pt-4">
                   <div className="flex flex-col items-center">
                     {/* Beautiful History Capitalized Title */}
-                    <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-black tracking-widest text-[#006400] uppercase">
+                    <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-black tracking-widest text-[#006400] uppercase">
                        History
                     </h2>
                     
                     {/* Paragraphs with customized high-end editorial styling */}
-                    <div className="mt-6 space-y-6 text-[#006400] text-sm sm:text-base md:text-lg leading-relaxed font-serif text-justify sm:text-center font-bold max-w-3xl px-4">
+                    <div className="mt-6 space-y-6 text-[#006400] text-sm sm:text-base md:text-lg leading-relaxed font-sans text-justify sm:text-center font-bold max-w-3xl px-4">
                       <p>
-                        Shielded from the southwest monsoons by Panglao Island and the north winds by the Maribojoc mountain range, Tagbilaran was formerly called <span className="font-serif italic font-extrabold text-[#38B000]">Tinabilan</span> , meaning "screened" or "shadowed". Another account says it is derived from <span className="font-serif italic font-extrabold text-[#38B000]">Tagubilaan</span> , a contraction from the words <span className="font-serif italic font-bold text-[#38B000]">tagu</span> that means "to hide" and <span className="font-serif italic font-bold text-[#38B000]">Bilaan</span>, a tribe of marauders.
+                        Shielded from the southwest monsoons by Panglao Island and the north winds by the Maribojoc mountain range, Tagbilaran was formerly called <span className="font-sans italic font-extrabold text-[#38B000]">Tinabilan</span> , meaning "screened" or "shadowed". Another account says it is derived from <span className="font-sans italic font-extrabold text-[#38B000]">Tagubilaan</span> , a contraction from the words <span className="font-sans italic font-bold text-[#38B000]">tagu</span> that means "to hide" and <span className="font-sans italic font-bold text-[#38B000]">Bilaan</span>, a tribe of marauders.
                       </p>
                       <p>
                         For 112 years, Tagbilaran was already an independent town before Bohol became a separate politico-military province from Cebu in 1854. Tagbilaran was made the capital town for the reason that it has a promising harbor. It became a chartered city on July 1, 1966.
@@ -305,7 +311,7 @@ export default function App() {
                 <section id="heritage-bento" className="scroll-mt-24 text-center">
                   <div className="flex flex-col items-center justify-center text-center max-w-3xl mx-auto mb-12 gap-8" id="bento-header-wrapper">
                     <div className="w-full text-center">
-                      <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#006400] animate-fade-in text-center">
+                      <h2 className="font-sans text-3xl sm:text-4xl md:text-5xl font-black tracking-tight text-[#006400] animate-fade-in text-center">
                         The Heritage and Tourism Ecosystem
                       </h2>
                       <p className="text-[#006400] text-sm sm:text-base leading-relaxed mt-4 font-sans font-bold text-center">
@@ -517,10 +523,30 @@ export default function App() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="bg-white text-[#05461a] pt-32 pb-24 px-4 sm:px-6 w-full flex flex-col items-center select-none"
+            className="bg-white text-[#05461a] pt-14 pb-20 w-full flex flex-col items-center select-none"
             id="barangay-view"
           >
             <TagbilaranDashboard />
+          </motion.div>
+        ) : activeView === "saulog" ? (
+          <motion.div
+            key="saulog-view"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <Saulog />
+          </motion.div>
+        ) : activeView === "travel" ? (
+          <motion.div
+            key="travel-view"
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          >
+            <Travel />
           </motion.div>
         ) : (
            /* LUXURIOUS ABOUT TAGBILARAN CITY VIEW */

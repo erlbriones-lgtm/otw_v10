@@ -1,354 +1,267 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
+import { ArrowLeft, ExternalLink, Minimize2, Sparkles, MapPin, Milestone } from "lucide-react";
 import { tagbilaranBarangays } from "../data";
-import { ArrowLeft, ArrowRight, Compass, Eye, Image as ImageIcon, ChevronLeft, ChevronRight } from "lucide-react";
 
-// Explicit visual mapping matching real local scenic assets (each Barangay has 3 high quality local photos)
-const barangayImageTrios: Record<string, string[]> = {
-  "Barangay Bool": [
-    "/temp/Blood Compact Shrine (2).webp",
-    "/temp/Blood Compact Shrine (28).webp",
-    "/temp/Blood Compact Shrine (31).webp"
-  ],
-  "Barangay Booy": [
-    "/temp/Taloto to Manga Coastline (6).webp",
-    "/temp/Taloto to Manga Coastline (1).webp",
-    "/temp/Tubig Dako in Taloto (1).webp"
-  ],
-  "Barangay Cabawan": [
-    "/temp/Balili Heritage House (4).webp",
-    "/temp/Poblacion 1, Tagbilaran City (2).webp",
-    "/temp/Old House in Poblacion 1 (3).webp"
-  ],
-  "Barangay Cogon": [
-    "/temp/City Lights of Tagbilaran (1).webp",
-    "/temp/City Lights of Tagbilaran (11).webp",
-    "/temp/City Lights of Tagbilaran (7).webp"
-  ],
-  "Barangay Dampas": [
-    "/temp/Bohol Blades (1).webp",
-    "/temp/Bohol Blades (4).webp",
-    "/temp/Poblacion 1, Tagbilaran City (1).webp"
-  ],
-  "Barangay Dao": [
-    "/temp/City Lights of Tagbilaran (11).webp",
-    "/temp/City Lights of Tagbilaran (9).webp",
-    "/temp/City Lights of Tagbilaran (7).webp"
-  ],
-  "Barangay Manga": [
-    "/temp/Taloto to Manga Coastline (1).webp",
-    "/temp/Taloto to Manga Coastline (6).webp",
-    "/temp/Tubig Dako in Taloto (1).webp"
-  ],
-  "Barangay Mansasa": [
-    "/temp/Taloto to Manga Coastline (6).webp",
-    "/temp/City Lights of Tagbilaran (11).webp",
-    "/temp/Taloto to Manga Coastline (1).webp"
-  ],
-  "Barangay Poblacion I": [
-    "/temp/Poblacion 1, Tagbilaran City (2).webp",
-    "/temp/Old House in Poblacion 1 (3).webp",
-    "/temp/Old House in Poblacion 1 (1).webp"
-  ],
-  "Barangay Poblacion II": [
-    "/temp/Poblacion 1, Tagbilaran City (1).webp",
-    "/temp/Old House in Poblacion 1 (1).webp",
-    "/temp/Old House in Poblacion 1 (5).webp"
-  ],
-  "Barangay Poblacion III": [
-    "/temp/Old House in Poblacion 1 (3).webp",
-    "/temp/Old House in Poblacion 1 (7).webp",
-    "/temp/Poblacion 1, Tagbilaran City (2).webp"
-  ],
-  "Barangay San Isidro": [
-    "/temp/Balili Heritage House (4).webp",
-    "/temp/Old House in Poblacion 1 (5).webp",
-    "/temp/Poblacion 1, Tagbilaran City (1).webp"
-  ],
-  "Barangay Taloto": [
-    "/temp/Tubig Dako in Taloto (1).webp",
-    "/temp/Taloto to Manga Coastline (1).webp",
-    "/temp/Taloto to Manga Coastline (6).webp"
-  ],
-  "Barangay Tiptip": [
-    "/temp/City Lights of Tagbilaran (7).webp",
-    "/temp/City Lights of Tagbilaran (8).webp",
-    "/temp/City Lights of Tagbilaran (9).webp"
-  ],
-  "Barangay Ubujan": [
-    "/temp/Capt. Salazar Monument (1).webp",
-    "/temp/Old House in Poblacion 1 (7).webp",
-    "/temp/Poblacion 1, Tagbilaran City (2).webp"
-  ]
+// Explicit visual mapping matching real local scenic assets (using original trios)
+const barangayImages: Record<string, string> = {
+  "Barangay Bool": "/temp/Blood Compact Shrine (28).webp",
+  "Barangay Booy": "/temp/Taloto to Manga Coastline (6).webp",
+  "Barangay Cabawan": "/temp/Balili Heritage House (4).webp",
+  "Barangay Cogon": "/temp/City Lights of Tagbilaran (11).webp",
+  "Barangay Dampas": "/webp/Old%20House%20in%20Poblacion%201%20(3).webp",
+  "Barangay Dao": "/temp/City Lights of Tagbilaran (9).webp",
+  "Barangay Manga": "/temp/Taloto to Manga Coastline (1).webp",
+  "Barangay Mansasa": "/temp/Taloto to Manga Coastline (6).webp",
+  "Barangay Poblacion I": "/temp/Poblacion 1, Tagbilaran City (2).webp",
+  "Barangay Poblacion II": "/temp/Poblacion 1, Tagbilaran City (1).webp",
+  "Barangay Poblacion III": "/webp/Old%20House%20in%20Poblacion%201%20(7).webp",
+  "Barangay San Isidro": "/temp/Balili Heritage House (4).webp",
+  "Barangay Taloto": "/temp/Tubig Dako in Taloto (1).webp",
+  "Barangay Tiptip": "/temp/City Lights of Tagbilaran (8).webp",
+  "Barangay Ubujan": "/temp/Capt. Salazar Monument (1).webp"
 };
 
-const getImagesForBarangay = (name: string): string[] => {
-  return barangayImageTrios[name] || [
-    "/temp/Poblacion 1, Tagbilaran City (2).webp",
-    "/temp/Poblacion 1, Tagbilaran City (1).webp",
-    "/temp/Old House in Poblacion 1 (3).webp"
-  ];
+// Map each barangay to initials matching the elegant Amazonia layout
+const getInitials = (name: string): string => {
+  const clean = name.replace("Barangay ", "");
+  if (clean === "Bool") return "BL";
+  if (clean === "Booy") return "BY";
+  if (clean === "Cabawan") return "CB";
+  if (clean === "Cogon") return "CG";
+  if (clean === "Dampas") return "DP";
+  if (clean === "Dao") return "DO";
+  if (clean === "Manga") return "MG";
+  if (clean === "Mansasa") return "MS";
+  if (clean === "Poblacion I") return "P1";
+  if (clean === "Poblacion II") return "P2";
+  if (clean === "Poblacion III") return "P3";
+  if (clean === "San Isidro") return "SI";
+  if (clean === "Taloto") return "TL";
+  if (clean === "Tiptip") return "TT";
+  if (clean === "Ubujan") return "UB";
+  return clean.substring(0, 2).toUpperCase();
 };
 
 export const TagbilaranDashboard: React.FC = () => {
-  const [selectedBarangay, setSelectedBarangay] = useState("Barangay Bool");
-  const [rotation, setRotation] = useState<number>(0);
-  const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [startX, setStartX] = useState<number>(0);
-  const [startRotation, setStartRotation] = useState<number>(0);
-  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [selectedBarangayName, setSelectedBarangayName] = useState<string>("Barangay Bool");
+  const [isDetailMode, setIsDetailMode] = useState<boolean>(false);
 
-  const activeImages = getImagesForBarangay(selectedBarangay);
-  const numItems = activeImages.length; // 3
-  const angleStep = 360 / numItems; // 120 degrees
-
-  // Detect mobile width dynamically to provide optimal 3D metrics
+  // Auto scroll to top on change
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [isDetailMode]);
 
-  // Reset rotation when selected barangay transitions to avoid sudden jumps
-  useEffect(() => {
-    setRotation(0);
-  }, [selectedBarangay]);
-
-  // Determine active photo index nearest to camera (0, 1, or 2)
-  let activeIndex = Math.round(-rotation / angleStep) % numItems;
-  if (activeIndex < 0) {
-    activeIndex += numItems;
-  }
-
-  // Snapping logic: snaps to the nearest photograph after idle
-  useEffect(() => {
-    if (isDragging) return;
-
-    const snapTimeout = setTimeout(() => {
-      const snapped = Math.round(rotation / angleStep) * angleStep;
-      if (snapped !== rotation) {
-        setRotation(snapped);
-      }
-    }, 400);
-
-    return () => clearTimeout(snapTimeout);
-  }, [rotation, isDragging, angleStep]);
-
-  // Preloading all pictures for 60FPS instant rendering
-  useEffect(() => {
-    const idlePreload = setTimeout(() => {
-      Object.keys(barangayImageTrios).forEach((bName) => {
-        getImagesForBarangay(bName).forEach((url) => {
-          const img = new Image();
-          img.src = url;
-        });
-      });
-    }, 1200);
-    return () => clearTimeout(idlePreload);
-  }, []);
-
-  // Responsive perspective dimensions for 3 items (made significantly larger!)
-  const cardWidth = isMobile ? 320 : 640;
-  const cardHeight = isMobile ? 220 : 420;
-  const cylinderRadius = isMobile ? 125 : 240; // Ideal spreading for equilateral triangle 3D formation
-
-  // Drag interaction handlers
-  const handleDragStart = (clientX: number) => {
-    setIsDragging(true);
-    setStartX(clientX);
-    setStartRotation(rotation);
-  };
-
-  const handleDragMove = (clientX: number) => {
-    if (!isDragging) return;
-    const deltaX = clientX - startX;
-    const dragSensitivity = isMobile ? 0.35 : 0.22;
-    setRotation(startRotation + deltaX * dragSensitivity);
-  };
-
-  const handleDragEnd = () => {
-    if (!isDragging) return;
-    setIsDragging(false);
-  };
-
-  // Scroll wheel rotation proxy
-  const handleWheel = (e: React.WheelEvent) => {
-    const scrollSensitivity = 0.06;
-    setRotation((prev) => prev - e.deltaY * scrollSensitivity);
-  };
-
-  // Spin active cylinder slot controllers
-  const spinNext = () => {
-    setRotation((prev) => prev - angleStep);
-  };
-
-  const spinPrev = () => {
-    setRotation((prev) => prev + angleStep);
-  };
-
-  const selectNextBarangay = () => {
-    const currentIndex = tagbilaranBarangays.findIndex((b) => b.name === selectedBarangay);
-    const nextIndex = (currentIndex + 1) % tagbilaranBarangays.length;
-    setSelectedBarangay(tagbilaranBarangays[nextIndex].name);
-  };
-
-  const selectPrevBarangay = () => {
-    const currentIndex = tagbilaranBarangays.findIndex((b) => b.name === selectedBarangay);
-    const prevIndex = (currentIndex - 1 + tagbilaranBarangays.length) % tagbilaranBarangays.length;
-    setSelectedBarangay(tagbilaranBarangays[prevIndex].name);
-  };
-
-  const activeBarangayData = tagbilaranBarangays.find((b) => b.name === selectedBarangay) || tagbilaranBarangays[0];
+  const activeBarangay = tagbilaranBarangays.find(b => b.name === selectedBarangayName) || tagbilaranBarangays[0];
+  const activeImage = barangayImages[activeBarangay.name] || "/temp/Poblacion 1, Tagbilaran City (2).webp";
 
   return (
-    <div className="w-full relative flex flex-col items-center bg-[#fff] py-2 overflow-visible select-none text-[#05461a]">
-
-      {/* BARANGAY MASTER LOGO HEADER */}
-      <div className="text-center mb-4 flex flex-col justify-center items-center" id="active-barangay-title-section">
-        <h3 className="font-serif font-[900] text-3.5xl sm:text-5xl md:text-6xl text-[#05461a] tracking-widest uppercase transition-all duration-300">
-          {activeBarangayData.name.replace("Barangay ", "")}
-        </h3>
-        <p className="font-jakarta text-[9px] sm:text-xs text-[#05461a]/50 tracking-[0.2em] uppercase font-extrabold mt-2.5">
-          {activeBarangayData.heritage}
-        </p>
+    <div className="w-full relative min-h-screen bg-white text-[#05461a] select-none overflow-hidden pb-12" id="barangay-dashboard-outer">
+      {/* Decorative Elegant Green Squiggle Wave running behind columns layout - matching the brand mockup */}
+      <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-32 pointer-events-none opacity-25 z-10 overflow-hidden hidden md:block">
+        <svg className="w-full h-full" viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path 
+            d="M-50,60 C150,20 300,100 500,60 C700,20 850,110 1050,70 C1250,30 1350,90 1550,55" 
+            stroke="#38B000" 
+            strokeWidth="3.5" 
+            strokeLinecap="round"
+            className="animate-pulse"
+          />
+        </svg>
       </div>
 
-      {/* 3D PERSPECTIVE CYLINDER PLATFORM WORKSPACE */}
-      <div 
-        className="relative w-full max-w-full h-[290px] sm:h-[480px] md:h-[510px] flex items-center justify-center overflow-visible select-none cursor-grab active:cursor-grabbing"
-        onMouseDown={(e) => handleDragStart(e.clientX)}
-        onMouseMove={(e) => handleDragMove(e.clientX)}
-        onMouseUp={handleDragEnd}
-        onMouseLeave={handleDragEnd}
-        onTouchStart={(e) => handleDragStart(e.touches[0].clientX)}
-        onTouchMove={(e) => handleDragMove(e.touches[0].clientX)}
-        onTouchEnd={handleDragEnd}
-        onWheel={handleWheel}
-        style={{
-          perspective: isMobile ? "800px" : "1300px",
-          perspectiveOrigin: "50% 50%"
-        }}
-        id="carousel-3d-perspective-stage"
-      >
-        
-        {/* REVOLVING CYLINDRICAL TRIANGULAR RING CONTAINER */}
-        <div 
-          className="relative flex items-center justify-center pointer-events-auto"
-          style={{
-            transformStyle: "preserve-3d",
-            transform: `rotateY(${rotation}deg)`,
-            width: `${cardWidth}px`,
-            height: `${cardHeight}px`,
-            transition: isDragging ? "none" : "transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)"
-          }}
-          id="cylindrical-rotating-ring"
-        >
-          {activeImages.map((imgUrl, i) => {
-            const cardRotation = i * angleStep;
+      <AnimatePresence mode="wait">
+        {!isDetailMode ? (
+          /* ================= FIRST VIEW: PORTAL SPLIT SYSTEM ================= */
+          <motion.div
+            key="split-portal"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            className="w-full max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-2 lg:mt-4 grid grid-cols-1 md:grid-cols-12 gap-8 items-stretch relative z-20 min-h-[72vh]"
+            id="barangay-split-portal"
+          >
             
-            // Depth-of-Field physics modeling: relative angle calculation
-            let relativeAngle = (cardRotation + rotation) % 360;
-            if (relativeAngle > 180) relativeAngle -= 360;
-            if (relativeAngle < -180) relativeAngle += 360;
-            
-            const absAngle = Math.abs(relativeAngle);
-            const frontWeight = Math.max(0, 1 - absAngle / 180);
-            
-            // Scale and fade items nicely as they orbit behind
-            const opacity = 0.35 + 0.65 * Math.pow(frontWeight, 2);
-            const scale = 0.88 + 0.12 * frontWeight;
-            const zIndex = Math.round(frontWeight * 100);
-            const blurPx = `${(1 - frontWeight) * 4}px`;
+            {/* COLUMN 1: CLICKABLE LIST (Left Third) */}
+            <div className="md:col-span-4 flex flex-col justify-center border-b md:border-b-0 md:border-r border-[#05461a]/10 pr-0 md:pr-4 pb-4 md:pb-0 max-h-[70vh] md:max-h-none overflow-y-auto md:overflow-visible scrollbar-none" id="brgy-clickable-list-col">
+              <div className="space-y-3 py-4 md:py-0">
+                {tagbilaranBarangays.map((brgy) => {
+                  const isSelected = brgy.name === selectedBarangayName;
+                  const cleanName = brgy.name.replace("Barangay ", "").toUpperCase();
+                  const initials = getInitials(brgy.name);
 
-            return (
-              <div
-                key={`${selectedBarangay}-image-slot-${i}`}
-                className="absolute inset-0 select-none pb-4"
-                style={{
-                  transform: `rotateY(${cardRotation}deg) translateZ(${cylinderRadius}px) scale(${scale})`,
-                  width: `${cardWidth}px`,
-                  height: `${cardHeight}px`,
-                  opacity: opacity,
-                  filter: `blur(${blurPx})`,
-                  zIndex: zIndex,
-                  backfaceVisibility: "hidden",
-                  pointerEvents: frontWeight > 0.45 ? "auto" : "none",
-                  transition: "opacity 0.35s, filter 0.35s"
-                }}
-                id={`cylinder-ring-slot-${i}`}
-              >
-                
-                {/* PICTURE DISPLAY SHIELD: BORDERLESS HIGH CONTRAST */}
-                <div 
-                  className="w-full h-full bg-white border border-neutral-150 rounded-[20px] shadow-2xl p-1 pointer-events-auto flex flex-col justify-between overflow-hidden transform transition-all duration-300 hover:scale-[1.03] group relative cursor-pointer"
-                  onClick={() => {
-                    const shortestAngle = -cardRotation;
-                    setRotation(shortestAngle);
-                  }}
+                  return (
+                    <button
+                      key={brgy.name}
+                      onMouseEnter={() => setSelectedBarangayName(brgy.name)}
+                      onClick={() => setIsDetailMode(true)}
+                      className={`w-full text-left flex items-baseline gap-3 cursor-pointer focus:outline-none group transition-all duration-300 ${
+                        isSelected 
+                          ? "text-[#38B000] scale-102 font-black pl-2 border-l-2 border-[#38B000]" 
+                          : "text-[#05461a]/50 hover:text-[#38B000] hover:pl-1 font-semibold"
+                      }`}
+                    >
+                      <span className={`font-mono text-[11px] tracking-widest font-black transition-colors ${
+                        isSelected ? "text-[#38B000]" : "text-[#05461a]/40 group-hover:text-[#38B000]"
+                      }`}>
+                        ({initials})
+                      </span>
+                      <span className="font-sans text-xl sm:text-2xl md:text-3xl font-black tracking-tight leading-none uppercase">
+                        {cleanName}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* COLUMN 2: MAIN IMAGE CANVAS (Center) */}
+            <div className="md:col-span-5 flex items-center justify-center relative mt-4 md:mt-0" id="brgy-image-canvas-col">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={selectedBarangayName}
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.4 }}
+                  className="w-full relative aspect-[4/5] md:aspect-[3/4] xl:aspect-[4/5] rounded-[24px] overflow-hidden shadow-2xl border border-[#05461a]/15 group bg-[#05461a]/5 cursor-pointer"
+                  onClick={() => setIsDetailMode(true)}
                 >
-                  <div className="w-full h-full rounded-[16px] overflow-hidden relative bg-neutral-100 flex items-center justify-center">
-                    <img 
-                      src={imgUrl} 
-                      alt={`${selectedBarangay} local spot ${i + 1}`}
-                      referrerPolicy="no-referrer"
-                      className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none group-hover:scale-105 transition-transform duration-500"
-                    />
-                    
-                    {/* Shadow overlay gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  <img
+                    src={activeImage}
+                    alt={activeBarangay.name}
+                    className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                    referrerPolicy="no-referrer"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#02200a]/80 via-transparent to-transparent pointer-events-none" />
+                  
+                  {/* Glowing Quick Interactive Ripple Indicator */}
+                  <div className="absolute top-5 right-5 bg-[#05461a]/95 backdrop-blur-md text-[#FFD54F] text-[10px] font-mono tracking-widest px-4 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 shadow-lg">
+                    <Sparkles className="w-3 h-3 animate-pulse text-[#FF9800]" />
+                    CLICK TO DETAILED VIEW
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
 
-                    {/* Minimalist image indicator watermark */}
-                    <div className="absolute bottom-3 right-3 px-2 py-1 bg-black/45 backdrop-blur-md rounded-md font-sans text-[8px] uppercase tracking-widest text-[#fff] font-bold inline-flex items-center gap-1.5 select-none pointer-events-none">
-                      <ImageIcon className="w-3 h-3 text-emerald-300" /> Spot {i + 1}
-                    </div>
+            {/* COLUMN 3: BRIEF DESCRIPTION & ENTRY TO FULLSCREEN (Right Third) */}
+            <div className="md:col-span-3 flex flex-col justify-end text-left sm:translate-y-4 md:translate-y-0" id="brgy-desc-action-col">
+              <div className="space-y-6 pb-6 pr-2">
+                <div className="space-y-2">
+                  <span className="font-mono text-[9px] tracking-widest text-[#CA8A04] font-black uppercase block">
+                    {activeBarangay.category} COMMUNITY DISTRICT
+                  </span>
+                  <p className="font-sans text-sm sm:text-base text-[#05461a]/85 leading-relaxed font-semibold">
+                    {activeBarangay.desc}
+                  </p>
+                </div>
+
+                {/* Micro highlights badge */}
+                <div className="py-2.5 px-4 rounded-xl bg-[#05461a]/5 border border-[#05461a]/10 space-y-1">
+                  <span className="text-[9px] font-mono text-[#05461a]/50 uppercase font-bold block">district specialty</span>
+                  <div className="flex items-center gap-1.5 font-sans font-black text-xs text-[#FF9800]">
+                    <MapPin className="w-3.5 h-3.5 text-red-500" />
+                    {activeBarangay.heritage}
                   </div>
                 </div>
 
+                {/* Big Pill Outline Button matching design language */}
+                <button
+                  onClick={() => setIsDetailMode(true)}
+                  className="w-full border-2 border-[#05461a]/25 hover:border-[#38B000] hover:text-[#38B000] text-[#05461a] py-3.5 px-6 rounded-full font-sans font-black text-xs sm:text-sm tracking-widest uppercase transition-all duration-300 bg-[#05461a]/5 hover:bg-[#05461a]/10 cursor-pointer flex items-center justify-center gap-2"
+                >
+                  LEARN MORE ABOUT {activeBarangay.name.replace("Barangay ", "").toUpperCase()}
+                  <ExternalLink className="w-4 h-4 ml-1" />
+                </button>
               </div>
-            );
-          })}
-        </div>
-      </div>
+            </div>
 
-      {/* RUSTIC COMPASS FLING CONTROLS */}
-      <div className="flex flex-col items-center gap-2 mt-2 select-none" id="carousel-navigation-dock">
-        <div className="flex items-center gap-4">
-          <button
-            onClick={spinPrev}
-            title="Rotate Left"
-            className="w-11 h-11 rounded-full border border-[#05461a]/15 bg-emerald-50/40 text-[#05461a] flex items-center justify-center hover:bg-[#05461a] hover:text-white transition-all cursor-pointer select-none active:scale-90"
+          </motion.div>
+        ) : (
+          /* ================= SECOND VIEW: CINEMATIC FULLSCREEN DETAIL ================= */
+          <motion.div
+            key="cinematic-fullscreen"
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            transition={{ duration: 0.55 }}
+            className="w-full min-h-screen relative flex flex-col justify-between items-center px-4 md:px-12 py-10 select-none"
+            id="barangay-cinematic-view"
           >
-            <ArrowLeft className="w-4 h-4" />
-          </button>
-          
-          {/* Active Image Indicator Dots */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 bg-[#05461a]/5 rounded-full border border-[#05461a]/10">
-            {activeImages.map((_, dotIdx) => {
-              const worksAsActive = dotIdx === activeIndex;
-              return (
-                <div 
-                  key={`dot-${dotIdx}`}
-                  className={`h-1.5 rounded-full transition-all duration-300 ${
-                    worksAsActive ? "w-4 bg-[#05461a]" : "w-1.5 bg-[#05461a]/20"
-                  }`}
-                />
-              );
-            })}
-          </div>
+            {/* Absolute Background image with custom forest-green / dark vignette cover */}
+            <div className="absolute inset-0 z-0">
+              <img
+                src={activeImage}
+                alt={activeBarangay.name}
+                className="w-full h-full object-cover transition-opacity duration-300"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#02200a]/95 via-[#05461a]/65 to-black/60 backdrop-blur-[1px] pointer-events-none" />
+              <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-t from-[#02200a] to-transparent pointer-events-none" />
+            </div>
 
-          <button
-            onClick={spinNext}
-            title="Rotate Right"
-            className="w-11 h-11 rounded-full border border-[#05461a]/15 bg-emerald-50/40 text-[#05461a] flex items-center justify-center hover:bg-[#05461a] hover:text-white transition-all cursor-pointer select-none active:scale-90"
-          >
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
-      </div>
+            {/* Back button */}
+            <div className="w-full max-w-6xl mt-6 z-10 flex text-left">
+              <button
+                onClick={() => setIsDetailMode(false)}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#05461a]/95 hover:bg-[#FF9850] text-[#FFD54F] hover:text-black font-sans font-black tracking-widest text-xs uppercase border border-[#FFD54F]/20 transition-all cursor-pointer pointer-events-auto shadow-xl"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                BACK TO OVERVIEW
+              </button>
+            </div>
 
+            {/* Content Core: Large centered texts */}
+            <div className="w-full max-w-6xl text-center py-12 md:py-20 z-10 space-y-10" id="cinematic-content">
+              {/* Giant Name with adaptive scaling (never wraps to 1 letter or truncates with ellipsis) */}
+              <motion.h2
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className={`font-sans font-black text-[#FFD54F] leading-none tracking-tight uppercase drop-shadow-[0_4px_30px_rgba(0,0,0,0.95)] text-center break-words select-none px-2 ${
+                  activeBarangay.name.replace("Barangay ", "").length > 10 
+                    ? "text-3xl sm:text-5xl md:text-7xl lg:text-8xl xl:text-[7.5rem]" 
+                    : "text-4xl sm:text-6xl md:text-8xl lg:text-[10rem] xl:text-[11.5rem]"
+                }`}
+              >
+                {activeBarangay.name.replace("Barangay ", "")}
+              </motion.h2>
+
+              {/* District Heritage Badging */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.3 }}
+                className="inline-flex items-center gap-3 bg-[#05461a] text-[#FFD54F] font-mono text-[10px] sm:text-xs font-black px-5 py-2 rounded-full border border-[#FFD54F]/30 uppercase tracking-widest mx-auto"
+              >
+                <Milestone className="w-3.5 h-3.5 text-[#FF9800]" />
+                {activeBarangay.heritage}
+              </motion.div>
+
+              {/* Full descriptive text of the Barangay */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.4 }}
+                className="font-sans text-white text-sm sm:text-base md:text-xl lg:text-2xl leading-relaxed max-w-4xl mx-auto font-black drop-shadow-[0_2px_12px_rgba(0,0,0,0.95)] text-center px-4"
+              >
+                {activeBarangay.desc} {activeBarangay.tip ? `Venture to find our ${activeBarangay.tip}.` : ""}
+              </motion.p>
+            </div>
+
+            {/* Sticky Footnote details */}
+            <div className="w-full max-w-6xl z-10 pb-4 flex flex-col sm:flex-row items-center justify-between text-xs font-mono text-white/50 gap-3 border-t border-white/10 pt-4">
+              <span className="flex items-center gap-1.5 font-bold">
+                <MapPin className="w-4 h-4 text-[#FF9800]" />
+                TAGBILARAN TOURISM NETWORK DIRECTORY
+              </span>
+              <span className="uppercase text-[10px] tracking-widest hidden sm:inline font-bold">PROVINCE OF BOHOL, PHILIPPINES</span>
+            </div>
+
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };

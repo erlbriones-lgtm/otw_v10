@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "motion/react";
 const logoUrl = "/webp/TagbilaranLogo.webp";
 
 interface NavbarProps {
-  activeView: "home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "about";
-  setActiveView: (view: "home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "about") => void;
+  activeView: "home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "saulog" | "travel" | "about";
+  setActiveView: (view: "home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "saulog" | "travel" | "about") => void;
   onPlanVisit?: () => void;
 }
 
@@ -27,7 +27,7 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const handleNavClick = (view: "home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "about") => {
+  const handleNavClick = (view: "home" | "heritage" | "tagbeats" | "downloadables" | "barangay" | "saulog" | "travel" | "about") => {
     setActiveView(view);
     setIsOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -51,13 +51,13 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
           {/* Desktop Symmetrical Navigation and Logo */}
           <div className="hidden xl:flex items-center justify-between w-full font-jakarta tracking-wide font-extrabold text-[12px] xl:text-[13px]">
             {/* Left links side */}
-            <div className="flex items-center justify-end gap-6 w-[43%]">
+            <div className="flex items-center justify-end gap-6 w-[43%] font-jakarta">
               <button
                 onClick={() => handleNavClick("home")}
-                className={`transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
                   activeView === "home"
                     ? "text-[#FFD54F] border-[#FFD54F]"
-                    : "text-white/80 hover:text-[#FFD54F] border-transparent"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
                 }`}
                 id="link-home"
               >
@@ -66,10 +66,10 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
               
               <button
                 onClick={() => handleNavClick("heritage")}
-                className={`transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
                   activeView === "heritage"
                     ? "text-[#FFD54F] border-[#FFD54F]"
-                    : "text-white/80 hover:text-[#FFD54F] border-transparent"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
                 }`}
                 id="link-heritage"
               >
@@ -78,14 +78,26 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
               
               <button
                 onClick={() => handleNavClick("barangay")}
-                className={`transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
                   activeView === "barangay"
                     ? "text-[#FFD54F] border-[#FFD54F]"
-                    : "text-white/80 hover:text-[#FFD54F] border-transparent"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
                 }`}
                 id="link-barangay"
               >
                 BARANGAY
+              </button>
+
+              <button
+                onClick={() => handleNavClick("saulog")}
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                  activeView === "saulog"
+                    ? "text-[#FFD54F] border-[#FFD54F]"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
+                }`}
+                id="link-saulog"
+              >
+                SAULOG
               </button>
             </div>
 
@@ -111,13 +123,13 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
             </div>
 
             {/* Right links side */}
-            <div className="flex items-center justify-start gap-6 w-[43%]">
+            <div className="flex items-center justify-start gap-6 w-[43%] font-jakarta">
               <button
                 onClick={() => handleNavClick("tagbeats")}
-                className={`transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
                   activeView === "tagbeats"
                     ? "text-[#FFD54F] border-[#FFD54F]"
-                    : "text-white/80 hover:text-[#FFD54F] border-transparent"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
                 }`}
                 id="link-tagbeats"
               >
@@ -126,10 +138,10 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
 
               <button
                 onClick={() => handleNavClick("downloadables")}
-                className={`transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
                   activeView === "downloadables"
                     ? "text-[#FFD54F] border-[#FFD54F]"
-                    : "text-white/80 hover:text-[#FFD54F] border-transparent"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
                 }`}
                 id="link-downloadables"
               >
@@ -137,11 +149,23 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
               </button>
 
               <button
+                onClick={() => handleNavClick("travel")}
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                  activeView === "travel"
+                    ? "text-[#FFD54F] border-[#FFD54F]"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
+                }`}
+                id="link-travel"
+              >
+                TRAVEL
+              </button>
+
+              <button
                 onClick={() => handleNavClick("about")}
-                className={`transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
+                className={`font-jakarta tracking-wide font-extrabold transition-colors hover:cursor-pointer pb-1 border-b-2 hover:text-[#FFD54F] ${
                   activeView === "about"
                     ? "text-[#FFD54F] border-[#FFD54F]"
-                    : "text-white/80 hover:text-[#FFD54F] border-transparent"
+                    : "text-white/85 hover:text-[#FFD54F] border-transparent"
                 }`}
                 id="link-about"
               >
@@ -221,8 +245,10 @@ export default function Navbar({ activeView, setActiveView, onPlanVisit }: Navba
                   { label: "HOME VIEW PORTAL", id: "home", view: "home" },
                   { label: "HERITAGE COLLECTIVE", id: "heritage", view: "heritage" },
                   { label: "BARANGAY DIRECTORY", id: "barangay", view: "barangay" },
+                  { label: "SAULOG SHOWDOWN Arena", id: "saulog", view: "saulog" },
                   { label: "SAULOG FESTIVAL HYMNS", id: "tagbeats", view: "tagbeats" },
                   { label: "RESOURCE DIRECTORY", id: "assets", view: "downloadables" },
+                  { label: "EXPLORE & TRAVEL GUIDE", id: "travel", view: "travel" },
                   { label: "THE CIVIC & EXECUTIVE HEART", id: "about", view: "about" }
                 ].map((link, lIdx) => (
                   <motion.button

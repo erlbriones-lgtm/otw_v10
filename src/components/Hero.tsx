@@ -84,10 +84,10 @@ export default function Hero({ onSwitchToHeritage, onPlanVisit, weatherDescripti
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.45 }}
-          className="font-moderniz text-lg sm:text-xl md:text-2xl lg:text-[1.75rem] font-medium tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#38B000] via-[#9EF01A] to-white max-w-3xl mx-auto mt-2 filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.98)] text-center block w-full uppercase"
+          className="font-moderniz text-[10px] sm:text-xs md:text-sm font-medium tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-[#38B000] via-[#9EF01A] to-white max-w-3xl mx-auto mt-2 filter drop-shadow-[0_4px_10px_rgba(0,0,0,0.98)] text-center block w-full uppercase"
           id="hero-subtitle"
         >
-          A HERITAGE CITY AWAKENS
+          WHERE HISTORY MEETS FRIENDSHIP
         </motion.p>
       </div>
     </section>
